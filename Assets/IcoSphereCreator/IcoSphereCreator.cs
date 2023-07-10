@@ -4,7 +4,7 @@ using System.Collections;
 public static class IcoSphereCreator {
 
 
-    public static Mesh Create(int n, float radius)
+    public static Mesh Create(int n, float radius, bool inner = false)
     {
         int nn = n * 4;
         int vertexNum = (nn * nn / 16) * 24;
@@ -83,21 +83,45 @@ public static class IcoSphereCreator {
                         d = Quaternion.Lerp(edge_p3, edge_p4, (float)(q + 1) / (n - p - 1));
                     }
 
-                    triangles[j] = j;
-                    vertices[j++] = new Vector3(a.x, a.y, a.z);
-                    triangles[j] = j;
-                    vertices[j++] = new Vector3(b.x, b.y, b.z);
-                    triangles[j] = j;
-                    vertices[j++] = new Vector3(c.x, c.y, c.z);
-                    if (q < n - p - 1)
+                    if (inner)
                     {
+                        // Inside Front，顺时针
+                        triangles[j] = j;
+                        vertices[j++] = new Vector3(a.x, a.y, a.z);
                         triangles[j] = j;
                         vertices[j++] = new Vector3(c.x, c.y, c.z);
                         triangles[j] = j;
                         vertices[j++] = new Vector3(b.x, b.y, b.z);
+                        if (q < n - p - 1)
+                        {
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(b.x, b.y, b.z);
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(c.x, c.y, c.z);
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(d.x, d.y, d.z);
+                        }
+                    } 
+                    else
+                    {
+                        // Outside Front，逆时针
                         triangles[j] = j;
-                        vertices[j++] = new Vector3(d.x, d.y, d.z);
+                        vertices[j++] = new Vector3(a.x, a.y, a.z);
+                        triangles[j] = j;
+                        vertices[j++] = new Vector3(b.x, b.y, b.z);
+                        triangles[j] = j;
+                        vertices[j++] = new Vector3(c.x, c.y, c.z);
+                        if (q < n - p - 1)
+                        {
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(c.x, c.y, c.z);
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(b.x, b.y, b.z);
+                            triangles[j] = j;
+                            vertices[j++] = new Vector3(d.x, d.y, d.z);
+                        }
                     }
+                    
                 }
             }
         }
